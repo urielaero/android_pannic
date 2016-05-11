@@ -358,6 +358,11 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     public void changePannicStatus(View view) {
         if (onPannic) {
             onPannic = false;
@@ -456,7 +461,7 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
     private void stopTracking(){
         Log.d("PANNIC", "Stop tracking mode");
-        if (mCurrentLocation != null) {
+        if (mGoogleApiClient != null && mCurrentLocation != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }

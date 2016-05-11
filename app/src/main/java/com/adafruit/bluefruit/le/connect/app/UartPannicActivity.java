@@ -147,9 +147,11 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
                     backgroundGradient.setColors(new int[]{0xFFFF0000, 0x80FF00FF});
                     pannicText.setText("**¡PANICO!**");
                     showNotify();
+                    activateTracking();
                 } else {
                     backgroundGradient.setColors(new int[]{0xFF03507B, 0xFF52FF44});
                     pannicText.setText("Todo bien...");
+                    stopTracking();
                 }
             }
         });
@@ -356,10 +358,6 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
     }
 
-
-
-
-
     public void changePannicStatus(View view) {
         if (onPannic) {
             onPannic = false;
@@ -394,13 +392,12 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
     @Override
     public void onConnected(Bundle arg0) {
         Log.d("PANNIC", "connected");
-        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mCurrentLocation != null) {
             Log.d("PANNIC", "Latitude: "+ String.valueOf(mCurrentLocation.getLatitude())+"Longitude: "+
                     String.valueOf(mCurrentLocation.getLongitude()));
-            startLocationUpdates();
+            //startLocationUpdates();
         } else {
             Log.d("PANNIC", "location empty");
         }
@@ -446,5 +443,21 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
                 String.valueOf(mCurrentLocation.getLongitude()));
         Toast.makeText(this, "update location",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    private void activateTracking(){
+        Log.d("PANNIC", "Tracking mode on");
+        if (mCurrentLocation != null) {
+            Log.d("PANNIC", "Latitude: "+ String.valueOf(mCurrentLocation.getLatitude())+"Longitude: "+
+                    String.valueOf(mCurrentLocation.getLongitude()));
+            startLocationUpdates();
+        }
+    }
+
+    private void stopTracking(){
+        Log.d("PANNIC", "Stop tracking mode");
+        if (mCurrentLocation != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
     }
 }

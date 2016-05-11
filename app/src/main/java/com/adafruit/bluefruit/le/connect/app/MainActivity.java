@@ -12,6 +12,7 @@ import android.bluetooth.BluetoothGattService;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
             if (autoResetBluetoothOnStart && wasBluetoothEnabled && areLocationServicesReadyForScanning) {
                 BleUtils.resetBluetoothAdapter(this, this);
             }
+            isGPSEnable();
         }
     }
 
@@ -1346,4 +1348,14 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
         mRetainedDataFragment.mSelectedDeviceData = mSelectedDeviceData;
     }
     // endregion
+    public void isGPSEnable(){
+        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean enabled = service
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!enabled) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+
+    }
 }

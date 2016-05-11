@@ -32,13 +32,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
-
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -448,13 +450,16 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
                 String.valueOf(mCurrentLocation.getLongitude()));
         Toast.makeText(this, "update location",
                 Toast.LENGTH_SHORT).show();
+        sendTrackingInfo(String.valueOf(mCurrentLocation.getLatitude()), String.valueOf(mCurrentLocation.getLatitude()));
     }
 
     private void activateTracking(){
         Log.d("PANNIC", "Tracking mode on");
+
         if (mCurrentLocation != null) {
             Log.d("PANNIC", "Latitude: "+ String.valueOf(mCurrentLocation.getLatitude())+"Longitude: "+
                     String.valueOf(mCurrentLocation.getLongitude()));
+            sendTrackingInfo(String.valueOf(mCurrentLocation.getLatitude()), String.valueOf(mCurrentLocation.getLongitude()));
             startLocationUpdates();
         }
     }
@@ -464,5 +469,47 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
         if (mGoogleApiClient != null && mCurrentLocation != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+    }
+
+    private void sendTrackingInfo(String lat, String lon) {
+
+        Log.d("PANNIC", "send packages");
+        final JSONObject j = new JSONObject();
+        try {
+            j.put("latitude", lat);
+            j.put("longitude", lon);
+        }catch (JSONException er){}
+
+        new Thread(new Runnable() {
+            public void run() {
+                ApiClient api = new ApiClient();
+                try {
+                    String res = api.post("locations", j.toString());
+                    Log.d("PANNIC", res);
+                }catch (IOException err) {
+                    Log.d("PANNIC", "errrrr");
+
+                }
+
+            }
+        }).start();
+        /*
+        RequestParams params = new RequestParams();
+        params.put("longitude", lon);
+        params.put("latitude", lat);
+        ApiClient.post("statuses/public_timeline.json", params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // If the response is JSONObject instead of expected JSONArray
+                Log.d("PANNIC", "request ending");
+                try {
+                    Log.d("PANNIC", response.getString("id"));
+                } catch (JSONException err) {
+                    Log.d("PANNIC", "error con json");
+                }
+            }
+        });
+        */
+
     }
 }

@@ -38,4 +38,5 @@ dependencies {
     compile 'com.larswerkman:HoloColorPicker:1.4'
     compile 'com.android.support:design:23.1.1'
     compile 'com.github.halysongoncalves:pugnotification:1.8.1'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 }

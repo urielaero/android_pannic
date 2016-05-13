@@ -47,6 +47,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 
@@ -118,6 +119,7 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
     private String destination_email;
 
+    private String UUIDPannic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -464,6 +466,7 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
     private void activateTracking(){
         Log.d("PANNIC", "Tracking mode on");
+        UUIDPannic = UUID.randomUUID().toString();
 
         if (mCurrentLocation != null) {
             Log.d("PANNIC", "Latitude: "+ String.valueOf(mCurrentLocation.getLatitude())+"Longitude: "+
@@ -484,10 +487,14 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
         Log.d("PANNIC", "send packages");
         final JSONObject j = new JSONObject();
+
+        //String ID = UUID.randomUUID().toString();
+        Log.d("PANNIC", UUIDPannic);
         try {
             j.put("latitude", lat);
             j.put("longitude", lon);
             j.put("user", destination_email);
+            j.put("uuid", UUIDPannic);
         }catch (JSONException er){}
 
         new Thread(new Runnable() {

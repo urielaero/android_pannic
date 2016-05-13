@@ -11,7 +11,8 @@
             android:summary="@string/settings_category_connectivity_pannic_email"
             android:title="@string/settings_category_connectivity_pannic_title"/>
     </PreferenceCategory>
-    
+
+    <!--
     <PreferenceCategory
         android:key="pref_key_connectivity_settings"
         android:title="@string/settings_category_connectivity">
@@ -51,13 +52,13 @@
             android:summary="@string/settings_gattautoconnect_summary"
             android:title="@string/settings_gattautoconnect_title"/>
 
-        <!--
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_refreshdevicecache"
             android:summary="@string/settings_blerefresh_summary"
             android:title="@string/settings_blerefresh_title"/>
--->
+
 
     </PreferenceCategory>
 
@@ -125,4 +126,5 @@
             android:title="@string/settings_pref_reset_title"
             />
     </PreferenceCategory>
+-->
 </PreferenceScreen>

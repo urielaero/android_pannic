@@ -33,7 +33,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         initSummary(getPreferenceScreen());
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
-        setupSpecialPreferences();
+        //setupSpecialPreferences();
     }
 
     @Override

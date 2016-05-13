@@ -494,7 +494,7 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
             j.put("latitude", lat);
             j.put("longitude", lon);
             j.put("user", destination_email);
-            j.put("uuid", UUIDPannic);
+            j.put("pannic", UUIDPannic);
         }catch (JSONException er){}
 
         new Thread(new Runnable() {

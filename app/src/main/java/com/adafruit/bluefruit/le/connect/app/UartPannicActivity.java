@@ -4,12 +4,14 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Menu;
@@ -114,6 +116,8 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
     private Location mCurrentLocation;
     private LocationRequest mLocationRequest;
 
+    private String destination_email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,14 +131,19 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
         onServicesDiscovered();
         sendByteConnection();
 
-        buildGoogleApiClient();
+        if (savedInstanceState == null) {
+            buildGoogleApiClient();
 
-        if (mGoogleApiClient != null) {
-            Log.d("PANNIC", "run connect");
-            mGoogleApiClient.connect();
-        } else {
-            Log.d("PANNIC", "fallo iniciar");
-            Toast.makeText(this, "Not connected...", Toast.LENGTH_SHORT).show();
+            if (mGoogleApiClient != null) {
+                Log.d("PANNIC", "run connect");
+                mGoogleApiClient.connect();
+            } else {
+                Log.d("PANNIC", "fallo iniciar");
+                Toast.makeText(this, "Not connected...", Toast.LENGTH_SHORT).show();
+            }
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            destination_email = sharedPreferences.getString("pref_to_email", null);
         }
 
     }
@@ -450,7 +459,7 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
                 String.valueOf(mCurrentLocation.getLongitude()));
         Toast.makeText(this, "update location",
                 Toast.LENGTH_SHORT).show();
-        sendTrackingInfo(String.valueOf(mCurrentLocation.getLatitude()), String.valueOf(mCurrentLocation.getLatitude()));
+        sendTrackingInfo(String.valueOf(mCurrentLocation.getLatitude()), String.valueOf(mCurrentLocation.getLongitude()));
     }
 
     private void activateTracking(){
@@ -478,6 +487,7 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
         try {
             j.put("latitude", lat);
             j.put("longitude", lon);
+            j.put("user", destination_email);
         }catch (JSONException er){}
 
         new Thread(new Runnable() {
@@ -493,23 +503,6 @@ public class UartPannicActivity extends UartInterfaceActivity implements BleMana
 
             }
         }).start();
-        /*
-        RequestParams params = new RequestParams();
-        params.put("longitude", lon);
-        params.put("latitude", lat);
-        ApiClient.post("statuses/public_timeline.json", params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // If the response is JSONObject instead of expected JSONArray
-                Log.d("PANNIC", "request ending");
-                try {
-                    Log.d("PANNIC", response.getString("id"));
-                } catch (JSONException err) {
-                    Log.d("PANNIC", "error con json");
-                }
-            }
-        });
-        */
 
     }
 }

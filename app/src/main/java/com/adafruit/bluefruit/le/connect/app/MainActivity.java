@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements BleManager.BleMan
             boolean disableWifi = sharedPreferences.getBoolean("pref_disableWifi", false);
             boolean updatesEnabled = sharedPreferences.getBoolean("pref_updatesenabled", true);
 
+
             // Update SoftwareUpdateManager
             if (updatesEnabled) {
                 mFirmwareUpdater = new FirmwareUpdater(this, this);

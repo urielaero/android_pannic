@@ -15,7 +15,7 @@ import okhttp3.Response;
 
 
 public class ApiClient {
-    private static final String BaseUrl = "http://192.168.0.22:4000/api/v1/";
+    private static final String BaseUrl = "http://iron_api.reepsy.com/api/v1/";
     private static String getAbsoluteUrl(String relativeUrl) {
         return BaseUrl + relativeUrl;
     }

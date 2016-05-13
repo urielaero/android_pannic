@@ -280,6 +280,11 @@
     <string name="settings_uarttextmaxpackets_summary_format">Maximum number of packets displayed: %d\n(high values could impact performance)</string>
     <string name="settings_uarttextmaxpackets_edittitle">Update text packets limit</string>
 
+    <!-- pannic -->
+    <string name="settings_category_connectivity_pannic">Pannic</string>
+    <string name="settings_category_connectivity_pannic_email">Ingresa el correo a donde se enviaran las alertas.</string>
+    <string name="settings_category_connectivity_pannic_title">Email</string>
+
 
     <!-- Firmware & Bootloader updates -->
     <string name="firmware_downloading">Downloading firmware…</string>
